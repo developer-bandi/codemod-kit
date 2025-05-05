@@ -1,0 +1,54 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #9568a1;
+  --ifm-color-primary-dark: #875c93;
+  --ifm-color-primary-darker: #80568b;
+  --ifm-color-primary-darkest: #694772;
+  --ifm-color-primary-light: #a078ab;
+  --ifm-color-primary-lighter: #a680b0;
+  --ifm-color-primary-lightest: #b799c0;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme="dark"] {
+  --ifm-color-primary: #9568a1;
+  --ifm-color-primary-dark: #875c93;
+  --ifm-color-primary-darker: #80568b;
+  --ifm-color-primary-darkest: #694772;
+  --ifm-color-primary-light: #a078ab;
+  --ifm-color-primary-lighter: #a680b0;
+  --ifm-color-primary-lightest: #b799c0;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+.navbar-icon-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px; /* 충분한 너비 */
+  height: 40px; /* 충분한 높이 */
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  padding: 4px;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.navbar-icon-link:hover {
+  background: rgba(255, 255, 255, 0.1); /* 혹은 다크모드에 어울리는 색 */
+}
+
+.navbar-icon-link.github-icon {
+  background: url("./github.svg") no-repeat center;
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+}

@@ -1,0 +1,24 @@
+name: "Feature Request"
+description: "Request a feature"
+title: "[Feature] <a short description of the feature>"
+labels:
+  - "feature"
+body:
+  - type: dropdown
+    id: package
+    attributes:
+      label: Relevant Package
+      description: Select the package against which you want to request the feature.
+      options:
+        - package
+        - website
+      validations:
+        required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the feature you are requesting.
+      placeholder: I'd like to add a new feature to the add-props transformer.
+    validations:
+      required: true

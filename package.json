@@ -1,0 +1,38 @@
+{
+  "name": "@developer-bandi/codemod-kit",
+  "packageManager": "yarn@4.8.1",
+  "license": "MIT",
+  "workspaces": [
+    "package",
+    "website"
+  ],
+  "homepage": "https://codemod-kit.netlify.app",
+  "keywords": [
+    "codemod",
+    "refactoring",
+    "code transformation",
+    "jscodeshift",
+    "ast",
+    "code migration",
+    "javascript",
+    "typescript"
+  ],
+  "type": "module",
+  "author": "developer-bandi",
+  "scripts": {
+    "start:website": "build:package && yarn workspace website start",
+    "serve:website": "yarn workspace website serve",
+    "build:website": "yarn build:package && yarn workspace website build",
+    "test:package": "yarn workspace codemod-kit test",
+    "build:package": "yarn workspace codemod-kit build"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "@eslint/js": "^9.25.0",
+    "eslint": "^9.25.0",
+    "husky": "^9.1.7",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.30.1"
+  }
+}

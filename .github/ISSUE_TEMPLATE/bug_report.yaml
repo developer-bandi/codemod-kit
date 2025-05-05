@@ -1,0 +1,40 @@
+name: "Bug Report"
+description: "Report a bug"
+title: "[Bug] <a short description of the bug>"
+labels:
+  - "bug"
+body:
+  - type: dropdown
+    id: package
+    attributes:
+      label: Relevant Package
+      description: Select the package against which you want to report the bug.
+      options:
+        - package
+        - website
+      validations:
+        required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: The version of the package you are using.
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the bug you are experiencing.
+      placeholder: I'm experiencing a bug when using the add-props transformer.
+    validations:
+      required: true
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Describe the steps to reproduce the bug.
+      placeholder: 1. Run the add-props transformer.
+    validations:
+      required: true
