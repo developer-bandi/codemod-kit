@@ -39,7 +39,15 @@ export default [
       del({ targets: "dist" }),
       copy({
         targets: [
-          { src: "./package.json", dest: "dist" },
+          {
+            src: "./package.json",
+            dest: "dist",
+            transform: (contents) => {
+              const pkg = JSON.parse(contents.toString());
+              pkg.name = "codemod-kit";
+              return JSON.stringify(pkg, null, 2);
+            },
+          },
           { src: "./README.md", dest: "dist" },
         ],
       }),
