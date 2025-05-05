@@ -1,6 +1,6 @@
 {
   "name": "codemod-kit",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "description": "A tool that makes large-scale refactoring easier and safer.",
   "homepage": "https://codemod-kit.netlify.app",
