@@ -2798,7 +2798,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@docusaurus/theme-common@npm:3.7.0":
+"@docusaurus/theme-common@npm:3.7.0, @docusaurus/theme-common@npm:^3.7.0":
   version: 3.7.0
   resolution: "@docusaurus/theme-common@npm:3.7.0"
   dependencies:
@@ -16853,6 +16853,7 @@ __metadata:
     "@docusaurus/module-type-aliases": "npm:3.7.0"
     "@docusaurus/plugin-content-docs": "npm:^3.7.0"
     "@docusaurus/preset-classic": "npm:3.7.0"
+    "@docusaurus/theme-common": "npm:^3.7.0"
     "@docusaurus/tsconfig": "npm:3.7.0"
     "@docusaurus/types": "npm:3.7.0"
     "@mdx-js/react": "npm:^3.0.0"
