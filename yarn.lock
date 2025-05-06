@@ -2556,7 +2556,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@docusaurus/plugin-content-docs@npm:3.7.0":
+"@docusaurus/plugin-content-docs@npm:3.7.0, @docusaurus/plugin-content-docs@npm:^3.7.0":
   version: 3.7.0
   resolution: "@docusaurus/plugin-content-docs@npm:3.7.0"
   dependencies:
@@ -16807,6 +16807,7 @@ __metadata:
   dependencies:
     "@docusaurus/core": "npm:3.7.0"
     "@docusaurus/module-type-aliases": "npm:3.7.0"
+    "@docusaurus/plugin-content-docs": "npm:^3.7.0"
     "@docusaurus/preset-classic": "npm:3.7.0"
     "@docusaurus/tsconfig": "npm:3.7.0"
     "@docusaurus/types": "npm:3.7.0"
