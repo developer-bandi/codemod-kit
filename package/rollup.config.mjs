@@ -2,7 +2,6 @@ import typescript from "@rollup/plugin-typescript";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import nodePolyfills from "rollup-plugin-node-polyfills";
-import copy from "rollup-plugin-copy";
 import del from "rollup-plugin-delete";
 import json from "@rollup/plugin-json";
 import dts from "rollup-plugin-dts";
@@ -37,20 +36,6 @@ export default [
     },
     plugins: [
       del({ targets: "dist" }),
-      copy({
-        targets: [
-          {
-            src: "./package.json",
-            dest: "dist",
-            transform: (contents) => {
-              const pkg = JSON.parse(contents.toString());
-              pkg.name = "codemod-kit";
-              return JSON.stringify(pkg, null, 2);
-            },
-          },
-          { src: "./README.md", dest: "dist" },
-        ],
-      }),
       nodePolyfills(),
       typescript(),
       resolve({

@@ -1,6 +1,6 @@
 {
-  "name": "package",
-  "version": "0.0.2",
+  "name": "codemod-kit",
+  "version": "0.0.3",
   "license": "MIT",
   "description": "A tool that makes large-scale refactoring easier and safer.",
   "homepage": "https://codemod-kit.netlify.app",
@@ -14,6 +14,11 @@
     "javascript",
     "typescript"
   ],
+  "files": [
+    "dist",
+    "package.json",
+    "README.md"
+  ],
   "scripts": {
     "test": "vitest",
     "start": "node index.js",
@@ -22,12 +27,12 @@
   "bin": "./cli.js",
   "exports": {
     "./programmatic": {
-      "require": "./programmatic.js",
-      "types": "./programmatic.d.ts"
+      "require": "./dist/programmatic.js",
+      "types": "./dist/programmatic.d.ts"
     },
     "./browser": {
-      "import": "./browser.js",
-      "types": "./browser.d.ts"
+      "import": "./dist/browser.js",
+      "types": "./dist/browser.d.ts"
     }
   },
   "dependencies": {
@@ -45,7 +50,6 @@
     "@types/inquirer": "^9.0.7",
     "glob": "^11.0.2",
     "rollup": "^4.40.1",
-    "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-delete": "^3.0.1",
     "rollup-plugin-dts": "^6.2.1",
     "rollup-plugin-node-polyfills": "^0.2.1",

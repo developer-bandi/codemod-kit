@@ -21,8 +21,8 @@
   "author": "developer-bandi",
   "scripts": {
     "start:website": "yarn workspace website start",
-    "serve:website": "yarn workspace website serve",
     "build:website": "yarn workspace website build",
+    "serve:website": "yarn workspace website serve",
     "test:package": "yarn workspace package test",
     "build:package": "yarn workspace package build"
   },

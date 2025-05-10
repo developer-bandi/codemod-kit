@@ -26,7 +26,7 @@
     "antd": "^5.24.9",
     "assert": "^2.1.0",
     "clsx": "^2.0.0",
-    "codemod-kit": "^0.0.2",
+    "codemod-kit": "workspace:*",
     "constants-browserify": "^1.0.0",
     "jscodeshift": "^17.3.0",
     "monaco-editor": "^0.52.2",
