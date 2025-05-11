@@ -20,11 +20,11 @@
   "type": "module",
   "author": "developer-bandi",
   "scripts": {
-    "start:website": "yarn workspace website start",
-    "build:website": "yarn workspace website build",
-    "serve:website": "yarn workspace website serve",
     "test:package": "yarn workspace package test",
-    "build:package": "yarn workspace package build"
+    "build:package": "yarn workspace package build",
+    "start:website": "yarn build:package && yarn workspace website start",
+    "build:website": "yarn build:package && yarn workspace website build",
+    "serve:website": "yarn workspace website serve"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
