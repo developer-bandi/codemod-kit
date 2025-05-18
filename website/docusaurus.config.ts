@@ -118,7 +118,7 @@ const config: Config = {
         },
         { to: "/playground", label: "Playground", position: "left" },
         {
-          href: "https://github.com/사용자명/레포명",
+          href: "https://github.com/developer-bandi/codemod-kit",
           position: "right",
           className: "navbar-icon-link github-icon",
           "aria-label": "GitHub repository",
