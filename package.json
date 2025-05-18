@@ -20,8 +20,8 @@
   "type": "module",
   "author": "developer-bandi",
   "scripts": {
-    "test:package": "yarn workspace package test",
-    "build:package": "yarn workspace package build",
+    "test:package": "yarn workspace codemod-kit test",
+    "build:package": "yarn workspace codemod-kit build",
     "start:website": "yarn build:package && yarn workspace website start",
     "build:website": "yarn build:package && yarn workspace website build",
     "serve:website": "yarn workspace website serve"
