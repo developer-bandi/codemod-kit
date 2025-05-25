@@ -1,0 +1,14 @@
+name: "Chore Environment"
+description: "Chore environment"
+title: "[Chore] <a short description of the issue>"
+labels:
+  - "chore"
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the issue you are requesting.
+      placeholder: I'd like to add a test CI to the environment.
+    validations:
+      required: true

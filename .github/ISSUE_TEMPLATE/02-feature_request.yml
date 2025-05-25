@@ -1,5 +1,5 @@
 name: "Feature Request"
-description: "Request a feature"
+description: "Request a feature about website or package"
 title: "[Feature] <a short description of the feature>"
 labels:
   - "feature"
