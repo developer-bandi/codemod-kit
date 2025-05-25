@@ -15,3 +15,7 @@
 ## License
 
 codemod-kit inherits is licensed under a permissive MIT license.
+
+## Contribute
+
+All contributions are welcome, including new transformers, additional options, and website work!
