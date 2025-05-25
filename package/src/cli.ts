@@ -80,5 +80,4 @@ async function runCLI() {
   }
 }
 
-// CLI 실행
 runCLI();
