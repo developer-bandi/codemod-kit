@@ -12,8 +12,6 @@ body:
       options:
         - package
         - website
-      validations:
-        required: true
   - type: textarea
     id: description
     attributes:
