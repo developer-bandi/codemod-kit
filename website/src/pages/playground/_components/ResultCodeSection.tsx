@@ -1,6 +1,6 @@
 import { Editor } from "@monaco-editor/react";
 import useStore from "../_store";
-import useTypeScriptReactMonaco from "@site/src/hooks/useTypeScriptReactMonaco";
+import useTypeScriptReactMonaco from "@site/src/pages/playground/_hooks/useTypeScriptReactMonaco";
 import { useColorMode } from "@docusaurus/theme-common";
 const ResultCodeSection = () => {
   const resultCode = useStore((state) => state.resultCode);

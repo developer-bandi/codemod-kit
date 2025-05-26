@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { optionJsonSchemaMap } from "codemod-kit/browser";
-import getTransformedCode from "../../utils/getTransformedCode";
+import getTransformedCode from "./_utils/getTransformedCode";
 
 interface State {
   transformerCategory: string;
