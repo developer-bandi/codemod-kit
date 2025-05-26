@@ -6,6 +6,7 @@ import { OptionsSchema as ChangeNamedSpecifierOptionsSchema } from "./transforme
 import { OptionsSchema as ChangeSourceOptionsSchema } from "./transformers/change-source/optionsSchema";
 import { OptionsSchema as RemoveImportOptionsSchema } from "./transformers/remove-import/optionsSchema";
 import { OptionsSchema as SeperateNamedSpecifierOptionsSchema } from "./transformers/seperate-named-specfier/optionsSchema";
+import { OptionsSchema as ChangeParameterObjectOptionsSchema } from "./transformers/change-parameter-object/optionsSchema";
 
 import path from "path";
 import jscodeshiftRunner from "jscodeshift/src/Runner";
@@ -66,4 +67,5 @@ export const transformMap = {
   "seperate-named-specifier": transformer<SeperateNamedSpecifierOptionsSchema>(
     "seperate-named-specifier"
   ),
+  "change-parameter-object": transformer<ChangeParameterObjectOptionsSchema>,
 };

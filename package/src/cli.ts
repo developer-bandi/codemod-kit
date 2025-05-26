@@ -12,6 +12,7 @@ import { optionsSchema as changeNamedSpecifierOptionsSchema } from "./transforme
 import { optionsSchema as changeSourceOptionsSchema } from "./transformers/change-source/optionsSchema";
 import { optionsSchema as removeImportOptionsSchema } from "./transformers/remove-import/optionsSchema";
 import { optionsSchema as seperateNamedSpecifierOptionsSchema } from "./transformers/seperate-named-specfier/optionsSchema";
+import { optionsSchema as changeParameterObjectOptionsSchema } from "./transformers/change-parameter-object/optionsSchema";
 
 const transformTypeSchemaMap = {
   "add-props": addPropsOptionsSchema,
@@ -22,6 +23,7 @@ const transformTypeSchemaMap = {
   "change-source": changeSourceOptionsSchema,
   "remove-import": removeImportOptionsSchema,
   "seperate-named-specifier": seperateNamedSpecifierOptionsSchema,
+  "change-parameter-object": changeParameterObjectOptionsSchema,
 };
 
 type TransformType = keyof typeof transformTypeSchemaMap;

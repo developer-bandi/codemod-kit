@@ -6142,7 +6142,7 @@ __metadata:
     zod: "npm:^3.24.3"
     zod-to-json-schema: "npm:^3.24.5"
   bin:
-    codemod-kit: ./cli.js
+    codemod-kit: ./dist/cli.js
   languageName: unknown
   linkType: soft
 
