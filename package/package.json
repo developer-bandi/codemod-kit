@@ -1,6 +1,6 @@
 {
   "name": "codemod-kit",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "license": "MIT",
   "description": "A tool that makes large-scale refactoring easier and safer.",
   "homepage": "https://codemod-kit.netlify.app",
@@ -24,7 +24,7 @@
     "start": "node index.js",
     "build": "rollup -c"
   },
-  "bin": "./cli.js",
+  "bin": "./dist/cli.js",
   "exports": {
     "./programmatic": {
       "require": "./dist/programmatic.js",
