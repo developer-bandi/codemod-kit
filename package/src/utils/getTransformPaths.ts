@@ -1,5 +1,7 @@
 import jscodeshift, { Options } from "jscodeshift";
 
+export type Parser = "babel" | "flow" | "tsx" | "ts";
+
 const getTransformParms = <T extends Options>({
   input,
   options,
@@ -9,7 +11,7 @@ const getTransformParms = <T extends Options>({
   input: string;
   options: T;
   path?: string;
-  parser?: "tsx" | "ts";
+  parser?: Parser;
 }) => {
   return [
     {
