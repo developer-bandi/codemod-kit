@@ -1,5 +1,5 @@
 import { OptionsSchema } from "./optionsSchema";
-import { getConvertedPath } from "../../../utils/getConvertedPath";
+import getConvertedPath from "../../../utils/getConvertedPath";
 import type { API, FileInfo } from "jscodeshift";
 
 function transformer(file: FileInfo, api: API, options: OptionsSchema) {

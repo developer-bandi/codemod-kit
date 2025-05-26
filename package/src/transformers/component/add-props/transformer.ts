@@ -1,6 +1,6 @@
 import type { API, FileInfo } from "jscodeshift";
 import { OptionsSchema } from "./optionsSchema";
-import { getConvertedPath } from "../../../utils/getConvertedPath";
+import getConvertedPath from "../../../utils/getConvertedPath";
 
 function transformer(file: FileInfo, api: API, options: OptionsSchema) {
   const sourceCode = file.source;

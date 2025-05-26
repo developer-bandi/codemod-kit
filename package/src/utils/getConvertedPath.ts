@@ -1,4 +1,4 @@
-import { getRelativePath } from "./determinPath";
+import generateRelativePath from "./generateRelativePath";
 import path from "path";
 
 export interface GetConvertedPathParams {
@@ -7,7 +7,7 @@ export interface GetConvertedPathParams {
   targetPath: string;
 }
 
-export function getConvertedPath({
+function getConvertedPath({
   type,
   currentPath,
   targetPath,
@@ -15,6 +15,8 @@ export function getConvertedPath({
   const absoulteCurrentFileName = path.join(process.cwd(), currentPath);
 
   return type === "relative"
-    ? getRelativePath(absoulteCurrentFileName, targetPath)
+    ? generateRelativePath(absoulteCurrentFileName, targetPath)
     : targetPath;
 }
+
+export default getConvertedPath;
