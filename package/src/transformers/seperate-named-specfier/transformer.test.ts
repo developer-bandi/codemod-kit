@@ -3,7 +3,7 @@ import path from "path";
 
 import transform from "./transformer";
 import { OptionsSchema } from "./optionsSchema";
-import getTransformParms from "../../../utils/getTransformPaths";
+import getTransformParms from "../../utils/getTransformPaths";
 
 describe("seperate-named-specifier", () => {
   it("single specifier without from import", () => {

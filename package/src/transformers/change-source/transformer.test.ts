@@ -3,7 +3,7 @@ import { it, expect, describe } from "vitest";
 import transform from "./transformer";
 import { OptionsSchema } from "./optionsSchema";
 import path from "path";
-import getTransformParms from "../../../utils/getTransformPaths";
+import getTransformParms from "../../utils/getTransformPaths";
 
 describe("change-source", () => {
   it("default exports", () => {

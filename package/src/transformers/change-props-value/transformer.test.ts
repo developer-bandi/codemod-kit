@@ -1,10 +1,9 @@
 import { it, expect, describe } from "vitest";
-import path from "path";
 import transform from "./transformer";
 import { OptionsSchema } from "./optionsSchema";
-import getTransformParms from "../../../utils/getTransformPaths";
+import getTransformParms from "../../utils/getTransformPaths";
 
-describe("change-props-name", () => {
+describe("change-props-value", () => {
   it("named export", () => {
     const input = `
 import { App } from "foo";
@@ -17,7 +16,7 @@ const result = <App
 import { App } from "foo";
 const result = <App
     title="hello"
-    content="this is dashboard page"
+    description={"this is home page"}
   />
 `;
     const transformParms = getTransformParms<OptionsSchema>({
@@ -27,8 +26,8 @@ const result = <App
         componentNameType: "named",
         componentSource: "foo",
         componentName: "App",
-        fromPropsName: "description",
-        toPropsName: "content",
+        propsName: "description",
+        propsValue: "this is home page",
       },
     });
     const output = transform(...transformParms);
@@ -48,7 +47,7 @@ const result = <Test
 import { App as Test } from "foo";
 const result = <Test
     title="hello"
-    content="this is dashboard page"
+    description={"this is home page"}
   />
 `;
     const transformParms = getTransformParms<OptionsSchema>({
@@ -58,8 +57,8 @@ const result = <Test
         componentNameType: "named",
         componentSource: "foo",
         componentName: "App",
-        fromPropsName: "description",
-        toPropsName: "content",
+        propsName: "description",
+        propsValue: "this is home page",
       },
     });
     const output = transform(...transformParms);
@@ -79,7 +78,7 @@ const result = <Test
 import Test from "foo";
 const result = <Test
     title="hello"
-    content="this is dashboard page"
+    description={"this is home page"}
   />
 `;
     const transformParms = getTransformParms<OptionsSchema>({
@@ -89,8 +88,8 @@ const result = <Test
         componentNameType: "default",
         componentSource: "foo",
         componentName: "App",
-        fromPropsName: "description",
-        toPropsName: "content",
+        propsName: "description",
+        propsValue: "this is home page",
       },
     });
     const output = transform(...transformParms);
@@ -103,14 +102,14 @@ const result = <Test
 import * as Test from "foo";
 const result = <Test
     title="hello"
-    description="this is dashboard page"
+    description="asdf"
   />
 `;
     const expectedOuput = `
 import * as Test from "foo";
 const result = <Test
     title="hello"
-    content="this is dashboard page"
+    description={"this is home page"}
   />
 `;
     const transformParms = getTransformParms<OptionsSchema>({
@@ -120,8 +119,8 @@ const result = <Test
         componentNameType: "default",
         componentSource: "foo",
         componentName: "App",
-        fromPropsName: "description",
-        toPropsName: "content",
+        propsName: "description",
+        propsValue: "this is home page",
       },
     });
     const output = transform(...transformParms);
@@ -134,14 +133,14 @@ const result = <Test
 import * as Test from "foo";
 const result = <Test.App
     title="hello"
-    description="this is dashboard page"
+    description="asdf"
   />
 `;
     const expectedOuput = `
 import * as Test from "foo";
 const result = <Test.App
     title="hello"
-    content="this is dashboard page"
+    description={"this is home page"}
   />
 `;
     const transformParms = getTransformParms<OptionsSchema>({
@@ -151,8 +150,96 @@ const result = <Test.App
         componentNameType: "named",
         componentSource: "foo",
         componentName: "App",
-        fromPropsName: "description",
-        toPropsName: "content",
+        propsName: "description",
+        propsValue: "this is home page",
+      },
+    });
+    const output = transform(...transformParms);
+
+    expect(output).toEqual(expectedOuput);
+  });
+
+  it("not match propsName", () => {
+    const input = `
+import { App } from "foo";
+const result = <App
+    title="hello"
+    description="this is home page"
+  />
+`;
+    const expectedOuput = `
+import { App } from "foo";
+const result = <App
+    title="hello"
+    description="this is home page"
+  />
+`;
+
+    const transformParms = getTransformParms<OptionsSchema>({
+      input,
+      options: {
+        componentSourceType: "absolute",
+        componentNameType: "named",
+        componentSource: "foo",
+        componentName: "App",
+        propsName: "any",
+        propsValue: "this is home page",
+      },
+    });
+    const output = transform(...transformParms);
+
+    expect(output).toEqual(expectedOuput);
+  });
+
+  it("propsValue number Type", () => {
+    const input = `import * as Test from "foo";
+const result = <Test.App
+    title="hello"
+    description="this is dashboard page"
+  />`;
+    const expectedOuput = `import * as Test from "foo";
+const result = <Test.App
+    title="hello"
+    description={1}
+  />`;
+
+    const transformParms = getTransformParms<OptionsSchema>({
+      input,
+      options: {
+        componentSourceType: "absolute",
+        componentNameType: "named",
+        componentSource: "foo",
+        componentName: "App",
+        propsName: "description",
+        propsValue: 1,
+      },
+    });
+    const output = transform(...transformParms);
+
+    expect(output).toEqual(expectedOuput);
+  });
+
+  it("propsName boolean type", () => {
+    const input = `import * as Test from "foo";
+const result = <Test.App
+    title="hello"
+    description="this is dashboard page"
+  />`;
+    const expectedOuput = `import * as Test from "foo";
+const result = <Test.App
+    title="hello"
+    description={false}
+  />`;
+
+    const transformParms = getTransformParms<OptionsSchema>({
+      input,
+      options: {
+        componentSourceType: "absolute",
+        componentNameType: "named",
+        componentSource: "foo",
+        componentName: "App",
+        propsName: "description",
+        propsValue: false,
       },
     });
     const output = transform(...transformParms);
@@ -161,27 +248,26 @@ const result = <Test.App
   });
 
   it("relative path", () => {
-    const input = `import { App } from "../test/foo.ts";
+    const input = `import { App } from "./test/foo.ts";
 const result = <App
     title="hello"
     description="this is dashboard page"
-  />
-    `;
-    const expectedOuput = `import { App } from "../test/foo.ts";
+  />`;
+    const expectedOuput = `import { App } from "./test/foo.ts";
 const result = <App
     title="hello"
-    content="this is dashboard page"
-  />
-    `;
+    description={"this is home page"}
+  />`;
+
     const transformParms = getTransformParms<OptionsSchema>({
       input,
       options: {
         componentSourceType: "relative",
         componentNameType: "named",
-        componentSource: path.join(process.cwd(), "../test/foo.ts"),
+        componentSource: "./test/foo.ts",
         componentName: "App",
-        fromPropsName: "description",
-        toPropsName: "content",
+        propsName: "description",
+        propsValue: "this is home page",
       },
     });
     const output = transform(...transformParms);

@@ -1,11 +1,11 @@
-import { OptionsSchema as AddPropsOptionsSchema } from "./transformers/component/add-props/optionsSchema";
-import { OptionsSchema as ChangePropsNameOptionsSchema } from "./transformers/component/change-props-name/optionsSchema";
-import { OptionsSchema as ChangePropsValueOptionsSchema } from "./transformers/component/change-props-value/optionsSchema";
-import { OptionsSchema as RemovePropsOptionsSchema } from "./transformers/component/remove-props/optionsSchema";
-import { OptionsSchema as ChangeNamedSpecifierOptionsSchema } from "./transformers/import/change-named-specifier/optionsSchema";
-import { OptionsSchema as ChangeSourceOptionsSchema } from "./transformers/import/change-source/optionsSchema";
-import { OptionsSchema as RemoveImportOptionsSchema } from "./transformers/import/remove-import/optionsSchema";
-import { OptionsSchema as SeperateNamedSpecifierOptionsSchema } from "./transformers/import/seperate-named-specfier/optionsSchema";
+import { OptionsSchema as AddPropsOptionsSchema } from "./transformers/add-props/optionsSchema";
+import { OptionsSchema as ChangePropsNameOptionsSchema } from "./transformers/change-props-name/optionsSchema";
+import { OptionsSchema as ChangePropsValueOptionsSchema } from "./transformers/change-props-value/optionsSchema";
+import { OptionsSchema as RemovePropsOptionsSchema } from "./transformers/remove-props/optionsSchema";
+import { OptionsSchema as ChangeNamedSpecifierOptionsSchema } from "./transformers/change-named-specifier/optionsSchema";
+import { OptionsSchema as ChangeSourceOptionsSchema } from "./transformers/change-source/optionsSchema";
+import { OptionsSchema as RemoveImportOptionsSchema } from "./transformers/remove-import/optionsSchema";
+import { OptionsSchema as SeperateNamedSpecifierOptionsSchema } from "./transformers/seperate-named-specfier/optionsSchema";
 
 import path from "path";
 import jscodeshiftRunner from "jscodeshift/src/Runner";

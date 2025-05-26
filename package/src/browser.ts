@@ -1,19 +1,19 @@
-import { optionsSchemaJsonSchema as addPropsOptionsSchemaJsonSchema } from "./transformers/component/add-props/optionsSchema";
-import { optionsSchemaJsonSchema as changePropsNameOptionsSchemaJsonSchema } from "./transformers/component/change-props-name/optionsSchema";
-import { optionsSchemaJsonSchema as changePropsValueOptionsSchemaJsonSchema } from "./transformers/component/change-props-value/optionsSchema";
-import { optionsSchemaJsonSchema as removePropsOptionsSchemaJsonSchema } from "./transformers/component/remove-props/optionsSchema";
-import { optionsSchemaJsonSchema as changeNamedSpecifierOptionsSchemaJsonSchema } from "./transformers/import/change-named-specifier/optionsSchema";
-import { optionsSchemaJsonSchema as changeSourceOptionsSchemaJsonSchema } from "./transformers/import/change-source/optionsSchema";
-import { optionsSchemaJsonSchema as removeImportOptionsSchemaJsonSchema } from "./transformers/import/remove-import/optionsSchema";
-import { optionsSchemaJsonSchema as seperateNamedSpecifierOptionsSchemaJsonSchema } from "./transformers/import/seperate-named-specfier/optionsSchema";
-import addPropsTransformer from "./transformers/component/add-props/transformer";
-import changePropsNameTransformer from "./transformers/component/change-props-name/transformer";
-import changePropsValueTransformer from "./transformers/component/change-props-value/transformer";
-import removePropsTransformer from "./transformers/component/remove-props/transformer";
-import changeNamedSpecifierTransformer from "./transformers/import/change-named-specifier/transformer";
-import changeSourceTransformer from "./transformers/import/change-source/transformer";
-import removeImportTransformer from "./transformers/import/remove-import/transformer";
-import seperateNamedSpecifierTransformer from "./transformers/import/seperate-named-specfier/transformer";
+import { optionsSchemaJsonSchema as addPropsOptionsSchemaJsonSchema } from "./transformers/add-props/optionsSchema";
+import { optionsSchemaJsonSchema as changePropsNameOptionsSchemaJsonSchema } from "./transformers/change-props-name/optionsSchema";
+import { optionsSchemaJsonSchema as changePropsValueOptionsSchemaJsonSchema } from "./transformers/change-props-value/optionsSchema";
+import { optionsSchemaJsonSchema as removePropsOptionsSchemaJsonSchema } from "./transformers/remove-props/optionsSchema";
+import { optionsSchemaJsonSchema as changeNamedSpecifierOptionsSchemaJsonSchema } from "./transformers/change-named-specifier/optionsSchema";
+import { optionsSchemaJsonSchema as changeSourceOptionsSchemaJsonSchema } from "./transformers/change-source/optionsSchema";
+import { optionsSchemaJsonSchema as removeImportOptionsSchemaJsonSchema } from "./transformers/remove-import/optionsSchema";
+import { optionsSchemaJsonSchema as seperateNamedSpecifierOptionsSchemaJsonSchema } from "./transformers/seperate-named-specfier/optionsSchema";
+import addPropsTransformer from "./transformers/add-props/transformer";
+import changePropsNameTransformer from "./transformers/change-props-name/transformer";
+import changePropsValueTransformer from "./transformers/change-props-value/transformer";
+import removePropsTransformer from "./transformers/remove-props/transformer";
+import changeNamedSpecifierTransformer from "./transformers/change-named-specifier/transformer";
+import changeSourceTransformer from "./transformers/change-source/transformer";
+import removeImportTransformer from "./transformers/remove-import/transformer";
+import seperateNamedSpecifierTransformer from "./transformers/seperate-named-specfier/transformer";
 
 export const transformMap = {
   "add-props": addPropsTransformer,

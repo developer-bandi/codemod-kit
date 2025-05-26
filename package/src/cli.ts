@@ -4,14 +4,14 @@ import path from "path";
 import jscodeshiftRunner from "jscodeshift/src/Runner";
 import inquirer from "inquirer";
 
-import { optionsSchema as addPropsOptionsSchema } from "./transformers/component/add-props/optionsSchema";
-import { optionsSchema as changePropsNameOptionsSchema } from "./transformers/component/change-props-name/optionsSchema";
-import { optionsSchema as changePropsValueOptionsSchema } from "./transformers/component/change-props-value/optionsSchema";
-import { optionsSchema as removePropsOptionsSchema } from "./transformers/component/remove-props/optionsSchema";
-import { optionsSchema as changeNamedSpecifierOptionsSchema } from "./transformers/import/change-named-specifier/optionsSchema";
-import { optionsSchema as changeSourceOptionsSchema } from "./transformers/import/change-source/optionsSchema";
-import { optionsSchema as removeImportOptionsSchema } from "./transformers/import/remove-import/optionsSchema";
-import { optionsSchema as seperateNamedSpecifierOptionsSchema } from "./transformers/import/seperate-named-specfier/optionsSchema";
+import { optionsSchema as addPropsOptionsSchema } from "./transformers/add-props/optionsSchema";
+import { optionsSchema as changePropsNameOptionsSchema } from "./transformers/change-props-name/optionsSchema";
+import { optionsSchema as changePropsValueOptionsSchema } from "./transformers/change-props-value/optionsSchema";
+import { optionsSchema as removePropsOptionsSchema } from "./transformers/remove-props/optionsSchema";
+import { optionsSchema as changeNamedSpecifierOptionsSchema } from "./transformers/change-named-specifier/optionsSchema";
+import { optionsSchema as changeSourceOptionsSchema } from "./transformers/change-source/optionsSchema";
+import { optionsSchema as removeImportOptionsSchema } from "./transformers/remove-import/optionsSchema";
+import { optionsSchema as seperateNamedSpecifierOptionsSchema } from "./transformers/seperate-named-specfier/optionsSchema";
 
 const transformTypeSchemaMap = {
   "add-props": addPropsOptionsSchema,

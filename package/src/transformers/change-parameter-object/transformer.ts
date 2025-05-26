@@ -1,5 +1,5 @@
 import { OptionsSchema } from "./optionsSchema";
-import getConvertedPath from "../../../utils/getConvertedPath";
+import getConvertedPath from "../../utils/getConvertedPath";
 import type { API, FileInfo } from "jscodeshift";
 
 function transformer(file: FileInfo, api: API, options: OptionsSchema) {
@@ -7,17 +7,17 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
   const jscodeshift = api.jscodeshift;
 
   const {
-    componentSourceType = "absolute",
-    componentNameType = "default",
-    componentSource,
-    componentName,
-    propsName,
+    functionSourceType = "absolute",
+    functionNameType = "default",
+    functionSource,
+    functionName,
+    objectKeys,
   } = options;
 
   const convertedComponentSource = getConvertedPath({
-    type: componentSourceType,
+    type: functionSourceType,
     currentPath: file.path,
-    targetPath: componentSource,
+    targetPath: functionSource,
   });
 
   let convertedComponentName: null | string = null;
@@ -29,41 +29,41 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
       node.value.specifiers?.forEach((specifier) => {
         if (
           specifier.type === "ImportDefaultSpecifier" &&
-          componentNameType === "default"
+          functionNameType === "default"
         ) {
           return (convertedComponentName =
             specifier.local?.type === "Identifier"
               ? specifier.local.name
-              : componentName);
+              : functionName);
         }
 
         if (
           specifier.type === "ImportSpecifier" &&
-          componentNameType === "named" &&
+          functionNameType === "named" &&
           specifier.imported.type === "Identifier" &&
-          specifier.imported.name === componentName
+          specifier.imported.name === functionName
         ) {
           return (convertedComponentName =
             specifier.local?.type === "Identifier"
               ? specifier.local.name
-              : componentName);
+              : functionName);
         }
 
         if (
           specifier.type === "ImportNamespaceSpecifier" &&
-          componentNameType === "default"
+          functionNameType === "default"
         ) {
           return (convertedComponentName =
             specifier.local?.type === "Identifier"
               ? specifier.local.name
-              : componentName);
+              : functionName);
         }
 
         if (
           specifier.type === "ImportNamespaceSpecifier" &&
-          componentNameType === "named"
+          functionNameType === "named"
         ) {
-          return (convertedComponentName = componentName);
+          return (convertedComponentName = functionName);
         }
       });
     });
@@ -72,22 +72,32 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
     return sourceCode;
   }
 
+  console.log(convertedComponentName);
+
   return jscodeshift(sourceCode)
-    .find(jscodeshift.JSXOpeningElement)
+    .find(jscodeshift.CallExpression)
     .filter((node) => {
       return (
-        (node.value.name.type === "JSXIdentifier" &&
-          node.value.name.name === convertedComponentName &&
-          node.scope.isGlobal) ||
-        (node.value.name.type === "JSXMemberExpression" &&
-          node.value.name.property.name === convertedComponentName)
+        node.value.callee.type === "Identifier" &&
+        node.value.callee.name === convertedComponentName &&
+        node.scope.isGlobal
       );
     })
     .forEach((node) => {
-      node.value.attributes = node.value.attributes?.filter(
-        (attribute) =>
-          attribute.type === "JSXAttribute" && attribute.name.name !== propsName
-      );
+      console.log(node.value.arguments);
+      node.value.arguments = [
+        jscodeshift.objectExpression(
+          node.value.arguments
+            .filter((argument) => argument.type !== "SpreadElement")
+            .map((argument, index) => {
+              return jscodeshift.objectProperty(
+                jscodeshift.literal(objectKeys[index]),
+                argument
+              );
+            })
+            .filter(Boolean)
+        ),
+      ];
     })
     .toSource();
 }

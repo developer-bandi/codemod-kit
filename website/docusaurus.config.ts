@@ -112,7 +112,7 @@ const config: Config = {
       items: [
         { to: "/docs/getting-started", label: "Docs", position: "left" },
         {
-          to: "/transformers/category/import",
+          to: "/transformers/add-props",
           label: "Transformers",
           position: "left",
         },

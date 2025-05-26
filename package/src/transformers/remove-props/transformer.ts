@@ -1,5 +1,5 @@
 import { OptionsSchema } from "./optionsSchema";
-import getConvertedPath from "../../../utils/getConvertedPath";
+import getConvertedPath from "../../utils/getConvertedPath";
 import type { API, FileInfo } from "jscodeshift";
 
 function transformer(file: FileInfo, api: API, options: OptionsSchema) {
@@ -7,17 +7,17 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
   const jscodeshift = api.jscodeshift;
 
   const {
-    functionSourceType = "absolute",
-    functionNameType = "default",
-    functionSource,
-    functionName,
-    objectKeys,
+    componentSourceType = "absolute",
+    componentNameType = "default",
+    componentSource,
+    componentName,
+    propsName,
   } = options;
 
   const convertedComponentSource = getConvertedPath({
-    type: functionSourceType,
+    type: componentSourceType,
     currentPath: file.path,
-    targetPath: functionSource,
+    targetPath: componentSource,
   });
 
   let convertedComponentName: null | string = null;
@@ -29,41 +29,41 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
       node.value.specifiers?.forEach((specifier) => {
         if (
           specifier.type === "ImportDefaultSpecifier" &&
-          functionNameType === "default"
+          componentNameType === "default"
         ) {
           return (convertedComponentName =
             specifier.local?.type === "Identifier"
               ? specifier.local.name
-              : functionName);
+              : componentName);
         }
 
         if (
           specifier.type === "ImportSpecifier" &&
-          functionNameType === "named" &&
+          componentNameType === "named" &&
           specifier.imported.type === "Identifier" &&
-          specifier.imported.name === functionName
+          specifier.imported.name === componentName
         ) {
           return (convertedComponentName =
             specifier.local?.type === "Identifier"
               ? specifier.local.name
-              : functionName);
+              : componentName);
         }
 
         if (
           specifier.type === "ImportNamespaceSpecifier" &&
-          functionNameType === "default"
+          componentNameType === "default"
         ) {
           return (convertedComponentName =
             specifier.local?.type === "Identifier"
               ? specifier.local.name
-              : functionName);
+              : componentName);
         }
 
         if (
           specifier.type === "ImportNamespaceSpecifier" &&
-          functionNameType === "named"
+          componentNameType === "named"
         ) {
-          return (convertedComponentName = functionName);
+          return (convertedComponentName = componentName);
         }
       });
     });
@@ -72,32 +72,22 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
     return sourceCode;
   }
 
-  console.log(convertedComponentName);
-
   return jscodeshift(sourceCode)
-    .find(jscodeshift.CallExpression)
+    .find(jscodeshift.JSXOpeningElement)
     .filter((node) => {
       return (
-        node.value.callee.type === "Identifier" &&
-        node.value.callee.name === convertedComponentName &&
-        node.scope.isGlobal
+        (node.value.name.type === "JSXIdentifier" &&
+          node.value.name.name === convertedComponentName &&
+          node.scope.isGlobal) ||
+        (node.value.name.type === "JSXMemberExpression" &&
+          node.value.name.property.name === convertedComponentName)
       );
     })
     .forEach((node) => {
-      console.log(node.value.arguments);
-      node.value.arguments = [
-        jscodeshift.objectExpression(
-          node.value.arguments
-            .filter((argument) => argument.type !== "SpreadElement")
-            .map((argument, index) => {
-              return jscodeshift.objectProperty(
-                jscodeshift.literal(objectKeys[index]),
-                argument
-              );
-            })
-            .filter(Boolean)
-        ),
-      ];
+      node.value.attributes = node.value.attributes?.filter(
+        (attribute) =>
+          attribute.type === "JSXAttribute" && attribute.name.name !== propsName
+      );
     })
     .toSource();
 }
