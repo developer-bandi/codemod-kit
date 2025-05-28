@@ -29,6 +29,7 @@
     "codemod-kit": "workspace:*",
     "constants-browserify": "^1.0.0",
     "jscodeshift": "^17.3.0",
+    "lz-string": "^1.5.0",
     "monaco-editor": "^0.52.2",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
@@ -37,7 +38,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-resizable-panels": "^2.1.8",
-    "zustand": "^5.0.4"
+    "zustand": "^5.0.4",
+    "zustand-querystring": "^0.2.0"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.7.0",

@@ -1,6 +1,9 @@
 import { create } from "zustand";
 import { optionJsonSchemaMap } from "codemod-kit/browser";
+import { querystring } from "zustand-querystring";
 import getTransformedCode from "./_utils/getTransformedCode";
+import writeQueryParam from "./_utils/writeQueryParam";
+import readQueryParam from "./_utils/readQueryParam";
 
 interface State {
   transformerCategory: string;
@@ -16,36 +19,56 @@ interface Actions {
   updateResultCode: (code: { type: string; result: string }) => void;
 }
 
-const useStore = create<State & Actions>((set, get) => ({
-  transformerCategory: Object.keys(optionJsonSchemaMap)[0],
-  transformerOption: {},
-  targetCode: "",
-  resultCode: { type: "success", result: "" },
-  updateTransformerCategory: (category) =>
-    set(() => ({
-      transformerCategory: category,
+interface Store extends State, Actions {}
+
+const useStore = create<Store>()(
+  querystring(
+    (set, get) => ({
+      transformerCategory: Object.keys(optionJsonSchemaMap)[0],
       transformerOption: {},
+      targetCode: "",
       resultCode: { type: "success", result: "" },
-    })),
-  updateTransformerOption: (option) =>
-    set(() => ({
-      transformerOption: option,
-      resultCode: getTransformedCode({
-        code: get().targetCode,
-        transformerCategory: get().transformerCategory,
-        transformerOption: option,
-      }),
-    })),
-  updateTargetCode: (code) =>
-    set(() => ({
-      targetCode: code,
-      resultCode: getTransformedCode({
-        code,
-        transformerCategory: get().transformerCategory,
-        transformerOption: get().transformerOption,
-      }),
-    })),
-  updateResultCode: (code) => set(() => ({ resultCode: code })),
-}));
+      updateTransformerCategory: (category) =>
+        set(() => ({
+          transformerCategory: category,
+          transformerOption: {},
+          resultCode: { type: "success", result: "" },
+        })),
+      updateTransformerOption: (option) =>
+        set(() => ({
+          transformerOption: option,
+          resultCode: getTransformedCode({
+            code: get().targetCode,
+            transformerCategory: get().transformerCategory,
+            transformerOption: option,
+          }),
+        })),
+      updateTargetCode: (code) =>
+        set(() => ({
+          targetCode: code,
+          resultCode: getTransformedCode({
+            code,
+            transformerCategory: get().transformerCategory,
+            transformerOption: get().transformerOption,
+          }),
+        })),
+      updateResultCode: (code) => set(() => ({ resultCode: code })),
+    }),
+    {
+      key: "state",
+      select() {
+        return {
+          transformerCategory: true,
+          transformerOption: true,
+          targetCode: true,
+        };
+      },
+      format: {
+        stringify: writeQueryParam<Store>,
+        parse: readQueryParam<Store>,
+      },
+    }
+  )
+);
 
 export default useStore;
