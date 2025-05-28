@@ -133,6 +133,12 @@ const config: Config = {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
     },
+    algolia: {
+      appId: "JTW6KZXFD2",
+      apiKey: process.env.ALGOLIA_API_KEY,
+      indexName: "codemod-kit",
+      insights: true,
+    },
   } satisfies Preset.ThemeConfig,
 };
 
