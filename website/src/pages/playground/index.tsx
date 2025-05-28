@@ -6,9 +6,11 @@ import { PanelGroup } from "react-resizable-panels";
 import OptionSection from "./_components/OptionSection";
 import TargetCodeSection from "./_components/TargetCodeSection";
 import ResultCodeSection from "./_components/ResultCodeSection";
+import useResetStore from "./_hooks/useResetStore";
 
 export default function Playground(): ReactNode {
   const { siteConfig } = useDocusaurusContext();
+  useResetStore();
 
   return (
     <Layout

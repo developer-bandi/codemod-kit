@@ -17,17 +17,22 @@ interface Actions {
   updateTransformerOption: (option: object) => void;
   updateTargetCode: (code: string) => void;
   updateResultCode: (code: { type: string; result: string }) => void;
+  reset: () => void;
 }
 
 interface Store extends State, Actions {}
 
+const initialValues = {
+  transformerCategory: Object.keys(optionJsonSchemaMap)[0],
+  transformerOption: {},
+  targetCode: "",
+  resultCode: { type: "success", result: "" },
+};
+
 const useStore = create<Store>()(
   querystring(
     (set, get) => ({
-      transformerCategory: Object.keys(optionJsonSchemaMap)[0],
-      transformerOption: {},
-      targetCode: "",
-      resultCode: { type: "success", result: "" },
+      ...initialValues,
       updateTransformerCategory: (category) =>
         set(() => ({
           transformerCategory: category,
@@ -53,6 +58,10 @@ const useStore = create<Store>()(
           }),
         })),
       updateResultCode: (code) => set(() => ({ resultCode: code })),
+      reset: () =>
+        set(() => ({
+          ...initialValues,
+        })),
     }),
     {
       key: "state",

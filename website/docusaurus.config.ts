@@ -107,7 +107,7 @@ const config: Config = {
       logo: {
         alt: "Codemon Kit Logo",
         src: "img/logo.svg",
-        href: "/home",
+        href: "/",
       },
       items: [
         { to: "/docs/getting-started", label: "Docs", position: "left" },
