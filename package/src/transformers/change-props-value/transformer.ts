@@ -1,6 +1,8 @@
 import { OptionsSchema } from "./optionsSchema";
 import getConvertedPath from "../../utils/getConvertedPath";
 import type { API, FileInfo } from "jscodeshift";
+import generateLiteralNode from "../../utils/jscodeshift/generateLiteralNode";
+
 function transformer(file: FileInfo, api: API, options: OptionsSchema) {
   const sourceCode = file.source;
   const jscodeshift = api.jscodeshift;
@@ -19,22 +21,6 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
     currentPath: file.path,
     targetPath: componentSource,
   });
-
-  const getPropValueNode = () => {
-    if (typeof propsValue === "string") {
-      return jscodeshift.stringLiteral(propsValue);
-    }
-
-    if (typeof propsValue === "boolean") {
-      return jscodeshift.booleanLiteral(propsValue);
-    }
-
-    if (typeof propsValue === "number") {
-      return jscodeshift.numericLiteral(propsValue);
-    }
-
-    return jscodeshift.literal(propsValue);
-  };
 
   let convertedComponentName: null | string = null;
 
@@ -107,7 +93,7 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
 
       if (attribute?.type === "JSXAttribute") {
         attribute.value = jscodeshift.jsxExpressionContainer(
-          getPropValueNode()
+          generateLiteralNode(propsValue)
         );
       }
     })

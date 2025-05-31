@@ -7,6 +7,7 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
   const sourceCode = file.source;
   const jscodeshift = api.jscodeshift;
   const { sourceType = "absolute", source } = options;
+  const root = jscodeshift(sourceCode);
 
   const convertedToPath = getConvertedPath({
     type: sourceType,
@@ -14,7 +15,7 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
     targetPath: source,
   });
 
-  return jscodeshift(sourceCode)
+  return root
     .find(jscodeshift.ImportDeclaration)
     .filter(
       (node) =>
