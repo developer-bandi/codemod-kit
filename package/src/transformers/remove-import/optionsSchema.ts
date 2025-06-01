@@ -3,12 +3,12 @@ import zodToJsonSchema from "zod-to-json-schema";
 
 export const optionsSchema = z
   .object({
-    source: z.string().describe("remove target source"),
+    source: z.string().describe("Source of the import module to be removed"),
     sourceType: z
       .enum(["absolute", "relative"])
       .optional()
       .describe(
-        "remove target source's type. you can choose absolute or relative"
+        "The type of value specified in the source option. You can select a relative or absolute."
       ),
   })
   .describe("remove import");

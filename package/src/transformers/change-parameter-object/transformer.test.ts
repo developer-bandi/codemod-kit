@@ -1,7 +1,7 @@
 import { it, expect, describe } from "vitest";
 import transform from "./transformer";
 import { OptionsSchema } from "./optionsSchema";
-import getTransformParms from "../../utils/getTransformPaths";
+import getTransformParms from "../../utils/test/getTransformPaths";
 
 describe("general case", () => {
   it("named export", () => {

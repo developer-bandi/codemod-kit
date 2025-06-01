@@ -1,11 +1,13 @@
 import { OptionsSchema } from "./optionsSchema";
-import getConvertedPath from "../../utils/getConvertedPath";
+import getConvertedPath from "../../utils/common/getConvertedPath";
 import type { API, FileInfo } from "jscodeshift";
+import isNodeGlobalScope from "../../utils/jscodeshift/isNodeGlobalScope";
+import getConvertedImportIdentifierName from "../../utils/jscodeshift/getConvertedImportIdentifierName";
+import isTargetFunctionCall from "../../utils/jscodeshift/isTargetFunctionCall";
 
 function transformer(file: FileInfo, api: API, options: OptionsSchema) {
   const sourceCode = file.source;
   const jscodeshift = api.jscodeshift;
-
   const {
     functionSourceType = "absolute",
     functionNameType = "default",
@@ -13,6 +15,7 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
     functionName,
     objectKeys,
   } = options;
+  const root = jscodeshift(sourceCode);
 
   const convertedComponentSource = getConvertedPath({
     type: functionSourceType,
@@ -20,72 +23,24 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
     targetPath: functionSource,
   });
 
-  let convertedComponentName: null | string = null;
+  const convertedFunctionName = getConvertedImportIdentifierName({
+    root,
+    jscodeshift,
+    source: convertedComponentSource,
+    nameType: functionNameType,
+    name: functionName,
+  });
 
-  jscodeshift(sourceCode)
-    .find(jscodeshift.ImportDeclaration)
-    .filter((node) => node.value.source.value === convertedComponentSource)
-    .forEach((node) => {
-      node.value.specifiers?.forEach((specifier) => {
-        if (
-          specifier.type === "ImportDefaultSpecifier" &&
-          functionNameType === "default"
-        ) {
-          return (convertedComponentName =
-            specifier.local?.type === "Identifier"
-              ? specifier.local.name
-              : functionName);
-        }
-
-        if (
-          specifier.type === "ImportSpecifier" &&
-          functionNameType === "named" &&
-          specifier.imported.type === "Identifier" &&
-          specifier.imported.name === functionName
-        ) {
-          return (convertedComponentName =
-            specifier.local?.type === "Identifier"
-              ? specifier.local.name
-              : functionName);
-        }
-
-        if (
-          specifier.type === "ImportNamespaceSpecifier" &&
-          functionNameType === "default"
-        ) {
-          return (convertedComponentName =
-            specifier.local?.type === "Identifier"
-              ? specifier.local.name
-              : functionName);
-        }
-
-        if (
-          specifier.type === "ImportNamespaceSpecifier" &&
-          functionNameType === "named"
-        ) {
-          return (convertedComponentName = functionName);
-        }
-      });
-    });
-
-  if (!convertedComponentName) {
-    return sourceCode;
+  if (!convertedFunctionName) {
+    return root.toSource();
   }
 
-  console.log(convertedComponentName);
-
-  return jscodeshift(sourceCode)
+  root
     .find(jscodeshift.CallExpression)
-    .filter((node) => {
-      return (
-        node.value.callee.type === "Identifier" &&
-        node.value.callee.name === convertedComponentName &&
-        node.scope.isGlobal
-      );
-    })
-    .forEach((node) => {
-      console.log(node.value.arguments);
-      node.value.arguments = [
+    .filter(isTargetFunctionCall(convertedFunctionName))
+    .filter(isNodeGlobalScope)
+    .replaceWith((node)=>{
+      return jscodeshift.callExpression(node.value.callee, [
         jscodeshift.objectExpression(
           node.value.arguments
             .filter((argument) => argument.type !== "SpreadElement")
@@ -97,9 +52,10 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
             })
             .filter(Boolean)
         ),
-      ];
+      ]);
     })
-    .toSource();
+
+  return root.toSource();
 }
 
 export default transformer;

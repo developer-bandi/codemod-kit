@@ -1,7 +1,7 @@
 import type { API, FileInfo } from "jscodeshift";
 
 import { OptionsSchema } from "./optionsSchema";
-import getConvertedPath from "../../utils/getConvertedPath";
+import getConvertedPath from "../../utils/common/getConvertedPath";
 
 function transformer(file: FileInfo, api: API, options: OptionsSchema) {
   const sourceCode = file.source;
@@ -24,7 +24,7 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
   root
     .find(jscodeshift.ImportDeclaration)
     .filter((node) => node.value.source.value === convertedFromPath)
-    .forEach((node) => (node.value.source.value = convertedToPath));
+    .replaceWith((node)=>jscodeshift.importDeclaration(node.value.specifiers, jscodeshift.literal(convertedToPath)))
 
   root
     .find(jscodeshift.CallExpression, (node) => node.callee.type === "Import")
@@ -33,11 +33,7 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
         node.value.arguments[0].type === "StringLiteral" &&
         node.value.arguments[0].value === options.fromSource
     )
-    .forEach(
-      (node) =>
-        node.value.arguments[0].type === "StringLiteral" &&
-        (node.value.arguments[0].value = options.toSource)
-    );
+    .replaceWith(()=>jscodeshift.callExpression(jscodeshift.identifier("import"), [jscodeshift.literal(options.toSource)]))
 
   return root.toSource();
 }

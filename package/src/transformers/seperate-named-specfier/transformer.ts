@@ -1,12 +1,13 @@
 import type { API, FileInfo } from "jscodeshift";
 
 import { OptionsSchema } from "./optionsSchema";
-import getConvertedPath from "../../utils/getConvertedPath";
+import getConvertedPath from "../../utils/common/getConvertedPath";
 
 function transformer(file: FileInfo, api: API, options: OptionsSchema) {
   const sourceCode = file.source;
   const jscodeshift = api.jscodeshift;
   const { sourceType = "absolute", fromSource, toSource, specifier } = options;
+  const root = jscodeshift(sourceCode);
 
   const convertedFromPath = getConvertedPath({
     type: sourceType,
@@ -26,14 +27,15 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
   });
 
   const isToImportDeclarationExist =
-    jscodeshift(sourceCode)
+    root
       .find(
         jscodeshift.ImportDeclaration,
         (node) => node.source.value === convertedToPath
       )
       .size() > 0;
 
-  const removedTargetImportSpecifiers = jscodeshift(sourceCode)
+  // remove target specifiers from fromImportDeclaration
+  root
     .find(jscodeshift.ImportSpecifier)
     .filter(
       (node) =>
@@ -42,10 +44,10 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
     )
     .filter((node) => node.parent.value.source.value === convertedFromPath)
     .remove()
-    .toSource();
 
+  // if toImportDeclaration is exist, add specifiers to toImportDeclaration
   if (isToImportDeclarationExist) {
-    const insertedNewSpecifiers = jscodeshift(removedTargetImportSpecifiers)
+    root
       .find(
         jscodeshift.ImportDeclaration,
         (node) => node.source.value === convertedToPath
@@ -55,9 +57,8 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
           node.value.specifiers = node.value.specifiers?.concat(specifierNodes);
         }
       })
-      .toSource();
 
-    return jscodeshift(insertedNewSpecifiers)
+    root
       .find(
         jscodeshift.ImportDeclaration,
         (node) =>
@@ -65,30 +66,29 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
           node.source.value === convertedFromPath
       )
       .remove()
-      .toSource();
-  }
-
-  const insertednewImportDeclaration = jscodeshift(
-    removedTargetImportSpecifiers
-  )
-    .find(jscodeshift.ImportDeclaration)
-    .filter((node, index) => index === 0)
-    .insertBefore(
-      jscodeshift.importDeclaration(
-        specifierNodes,
-        jscodeshift.literal(convertedToPath)
+      
+  // if toImportDeclaration is not exist, insert new toImportDeclaration
+  }else{
+    root
+      .find(jscodeshift.ImportDeclaration)
+      .filter((node, index) => index === 0)
+      .insertBefore(
+        jscodeshift.importDeclaration(
+          specifierNodes,
+          jscodeshift.literal(convertedToPath)
       )
     )
-    .toSource();
 
-  return jscodeshift(insertednewImportDeclaration)
-    .find(
-      jscodeshift.ImportDeclaration,
-      (node) =>
-        node.specifiers?.length === 0 && node.source.value === convertedFromPath
-    )
-    .remove()
-    .toSource();
+    root
+      .find(
+        jscodeshift.ImportDeclaration,
+        (node) =>
+          node.specifiers?.length === 0 && node.source.value === convertedFromPath
+      )
+      .remove()
+  }
+
+  return root.toSource();
 }
 
 export default transformer;

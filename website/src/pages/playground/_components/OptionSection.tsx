@@ -1,7 +1,7 @@
 import { optionJsonSchemaMap } from "codemod-kit/browser";
 import { useState, useEffect } from "react";
 import validator from "@rjsf/validator-ajv8";
-import { Select, Input, ConfigProvider, theme } from "antd";
+import { Select, Input, ConfigProvider, theme, Typography, Button } from "antd";
 import Form from "@rjsf/antd";
 
 import {
@@ -9,6 +9,8 @@ import {
   UiSchema,
   FieldTemplateProps,
   WidgetProps,
+  ArrayFieldTemplateProps,
+  ArrayFieldTemplateItemType,
 } from "@rjsf/utils";
 import useStore from "../_store";
 import { useColorMode } from "@docusaurus/theme-common";
@@ -44,6 +46,77 @@ const CustomTitleField = () => {
 
 const CustomDescriptionField = () => {
   return null;
+};
+
+interface ObjectFieldTemplateProps {
+  properties: {
+    content: React.ReactElement;
+    name: string;
+  }[];
+  title?: string;
+  description?: string;
+  uiSchema?: Record<string, unknown>;
+}
+
+const CustomObjectFieldTemplate = (props: ObjectFieldTemplateProps) => {
+  const { properties, title, description, uiSchema } = props;
+
+  // Skip rendering title for objects inside arrays
+  const isNestedObject = uiSchema && uiSchema["ui:options"] && uiSchema["ui:options"].nested;
+
+  return (
+    <div className="object-field-container">
+      {!isNestedObject && title && (
+        <div style={{ fontWeight: "bold", marginBottom: "8px" }}>
+          {title}
+        </div>
+      )}
+      {!isNestedObject && description && (
+        <Typography.Text type="secondary" style={{ marginBottom: "8px", display: "block" }}>
+          {description}
+        </Typography.Text>
+      )}
+      <div className="object-field-properties">
+        {properties.map((prop) => prop.content)}
+      </div>
+    </div>
+  );
+};
+
+const CustomArrayFieldTemplate = (props: ArrayFieldTemplateProps) => {
+  const { items, canAdd, onAddClick } = props;
+
+  return (
+    <div className="array-field-container" style={{ marginBottom: "16px" }}>
+      <div className="array-items">
+        {items.map((element: ArrayFieldTemplateItemType) => (
+          <div key={element.key} className="array-item-row" style={{ marginBottom: "8px", display: "flex", alignItems: "center" }}>
+            <div className="array-item-content" style={{ flex: 1 }}>
+              {element.children}
+            </div>
+            <Button 
+              danger 
+              type="text" 
+              onClick={element.onDropIndexClick(element.index)}
+              size="small"
+              style={{ marginLeft: "8px", flexShrink: 0 }}
+            >
+              삭제
+            </Button>
+          </div>
+        ))}
+      </div>
+      {canAdd && (
+        <Button 
+          type="dashed" 
+          onClick={onAddClick} 
+          style={{ marginTop: "8px", width: "100%" }}
+        >
+          + 항목 추가
+        </Button>
+      )}
+    </div>
+  );
 };
 
 interface EnumOption {
@@ -127,7 +200,7 @@ const OptionSection = () => {
     const schema = optionJsonSchemaMap[transformerCategory] as RJSFSchema;
     setCurrentSchema(schema);
 
-    if (schema && schema.properties) {
+    if (schema && typeof schema === 'object' && 'properties' in schema && schema.properties) {
       const newUiSchema: UiSchema = {
         "ui:submitButtonOptions": {
           submitText: "apply options",
@@ -154,6 +227,24 @@ const OptionSection = () => {
             if (!transformerOption || transformerOption[key] === undefined) {
               fieldUiSchema["ui:options"] = {
                 placeholder: "select option",
+              };
+            }
+          }
+
+          // Add special handling for array items
+          if (typeof prop === "object" && prop.type === "array" && prop.items) {
+            // If the array items are objects, mark them as nested
+            if (typeof prop.items === "object" && prop.items && 'type' in prop.items && prop.items.type === "object") {
+              fieldUiSchema["ui:options"] = {
+                ...(fieldUiSchema["ui:options"] || {}),
+                addButtonLabel: "항목 추가",
+              };
+              
+              // Add UI schema for the items
+              fieldUiSchema["items"] = {
+                "ui:options": {
+                  nested: true,
+                }
               };
             }
           }
@@ -232,6 +323,17 @@ const OptionSection = () => {
             .ant-select-item-option-content {
               font-size: 14px;
             }
+            .array-item-row .ant-form-item {
+              margin-bottom: 0;
+            }
+            .array-item-row .custom-field {
+              margin-bottom: 0;
+            }
+            .object-field-properties {
+              display: flex;
+              flex-direction: column;
+              gap: 12px;
+            }
           `}
           </style>
           {currentSchema && (
@@ -249,6 +351,8 @@ const OptionSection = () => {
                 FieldTemplate: CustomFieldTemplate,
                 TitleFieldTemplate: CustomTitleField,
                 DescriptionFieldTemplate: CustomDescriptionField,
+                ArrayFieldTemplate: CustomArrayFieldTemplate,
+                ObjectFieldTemplate: CustomObjectFieldTemplate,
                 ButtonTemplates: {
                   SubmitButton: CustomSubmitButton,
                 },

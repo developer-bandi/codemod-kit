@@ -1,7 +1,9 @@
 import type { API, FileInfo } from "jscodeshift";
 
 import { OptionsSchema } from "./optionsSchema";
-import getConvertedPath from "../../utils/getConvertedPath";
+import getConvertedPath from "../../utils/common/getConvertedPath";
+import isIdentifierNodeGlobalScope from "../../utils/jscodeshift/isNodeGlobalScope";
+import isImportDeclarationHasTargetSource from "../../utils/jscodeshift/isImportDeclarationHasTargetSource";
 
 function transformer(file: FileInfo, api: API, options: OptionsSchema) {
   const sourceCode = file.source;
@@ -12,6 +14,7 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
     toSpecifier,
     source,
   } = options;
+  const root = jscodeshift(sourceCode);
 
   const convertedSourcePath = getConvertedPath({
     type: sourceType,
@@ -19,26 +22,25 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
     targetPath: source,
   });
 
-  const isIncludeTargetImport =
-    jscodeshift(sourceCode)
+  const targetImportNodes =
+    root
       .find(jscodeshift.ImportDeclaration)
+      .filter(isImportDeclarationHasTargetSource(convertedSourcePath))
       .filter((node) => {
-        return (
-          node.value.source.value === convertedSourcePath &&
-          !!node.value.specifiers?.some(
-            (specifier) =>
-              specifier.type === "ImportSpecifier" &&
-              specifier.imported.name === fromSpecifier
-          )
+        return !!node.value.specifiers?.some(
+          (specifier) =>
+            specifier.type === "ImportSpecifier" &&
+            specifier.imported.name === fromSpecifier
         );
-      })
-      .size() >= 1;
+      });
 
-  if (!isIncludeTargetImport) {
-    return sourceCode;
+  const isSourceFileIncludeTargetImportNode = targetImportNodes.size() >= 1;
+
+  if (!isSourceFileIncludeTargetImportNode) {
+    return root.toSource();
   }
 
-  return jscodeshift(sourceCode)
+  root
     .find(jscodeshift.Identifier, (node) => node.name === fromSpecifier)
     .filter((node) => {
       const parentNodeType = node.parentPath.value.type;
@@ -47,9 +49,10 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
         parentNodeType
       );
     })
-    .filter((node) => node.scope.isGlobal)
-    .replaceWith(jscodeshift.identifier(toSpecifier))
-    .toSource();
+    .filter(isIdentifierNodeGlobalScope)
+    .replaceWith(jscodeshift.identifier(toSpecifier));
+
+  return root.toSource();
 }
 
 export default transformer;

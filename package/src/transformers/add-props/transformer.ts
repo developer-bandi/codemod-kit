@@ -1,6 +1,8 @@
 import type { API, FileInfo } from "jscodeshift";
 import { OptionsSchema } from "./optionsSchema";
-import getConvertedPath from "../../utils/getConvertedPath";
+import getConvertedPath from "../../utils/common/getConvertedPath";
+import isTargetJsxNode from "../../utils/jscodeshift/isTargetJsxNode";
+import getConvertedImportIdentifierName from "../../utils/jscodeshift/getConvertedImportIdentifierName";
 
 function transformer(file: FileInfo, api: API, options: OptionsSchema) {
   const sourceCode = file.source;
@@ -13,6 +15,7 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
     propsName,
     propsValue,
   } = options;
+  const root = jscodeshift(sourceCode);
 
   const convertedComponentSource = getConvertedPath({
     type: componentSourceType,
@@ -25,82 +28,35 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
     jscodeshift.jsxExpressionContainer(jscodeshift.literal(propsValue))
   );
 
-  let convertedComponentName: null | string = null;
-
-  jscodeshift(sourceCode)
-    .find(jscodeshift.ImportDeclaration)
-    .filter((node) => node.value.source.value === convertedComponentSource)
-    .forEach((node) => {
-      node.value.specifiers?.forEach((specifier) => {
-        if (
-          specifier.type === "ImportDefaultSpecifier" &&
-          componentNameType === "default"
-        ) {
-          return (convertedComponentName =
-            specifier.local?.type === "Identifier"
-              ? specifier.local.name
-              : componentName);
-        }
-
-        if (
-          specifier.type === "ImportSpecifier" &&
-          componentNameType === "named" &&
-          specifier.imported.type === "Identifier" &&
-          specifier.imported.name === componentName
-        ) {
-          return (convertedComponentName =
-            specifier.local?.type === "Identifier"
-              ? specifier.local.name
-              : componentName);
-        }
-
-        if (
-          specifier.type === "ImportNamespaceSpecifier" &&
-          componentNameType === "default"
-        ) {
-          return (convertedComponentName =
-            specifier.local?.type === "Identifier"
-              ? specifier.local.name
-              : componentName);
-        }
-
-        if (
-          specifier.type === "ImportNamespaceSpecifier" &&
-          componentNameType === "named"
-        ) {
-          return (convertedComponentName = componentName);
-        }
-      });
-    });
+  const convertedComponentName = getConvertedImportIdentifierName({
+    root,
+    jscodeshift,
+    source: convertedComponentSource,
+    nameType: componentNameType,
+    name: componentName,
+  });
 
   if (!convertedComponentName) {
-    return sourceCode;
+    return root.toSource();
   }
 
-  return jscodeshift(sourceCode)
+  root
     .find(jscodeshift.JSXOpeningElement)
-    .filter((node) => {
-      return (
-        (node.value.name.type === "JSXIdentifier" &&
-          node.value.name.name === convertedComponentName &&
-          node.scope.isGlobal) ||
-        (node.value.name.type === "JSXMemberExpression" &&
-          node.value.name.property.name === convertedComponentName)
-      );
-    })
+    .filter(isTargetJsxNode(convertedComponentName))
     .filter((node) => {
       return !node.value.attributes?.some(
         (attribute) =>
-          attribute.type === "JSXAttribute" && attribute.name.name === propsName
+          attribute.type === "JSXAttribute" && attribute.name?.name === propsName
       );
     })
-    .forEach((node) => {
-      node.value.attributes = [
+    .replaceWith((node)=>{
+      return jscodeshift.jsxOpeningElement(node.value.name, [
         ...(node.value.attributes ?? []),
         jsxAttributeNodeFromOption,
-      ];
+      ])
     })
-    .toSource();
+
+    return root.toSource();
 }
 
 export default transformer;

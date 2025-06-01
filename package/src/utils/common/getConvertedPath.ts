@@ -1,5 +1,9 @@
-import generateRelativePath from "./generateRelativePath";
 import path from "path";
+
+export function generateRelativePath(from: string, to: string): string {
+  const relativePath = path.relative(path.dirname(from), to);
+  return relativePath.startsWith(".") ? relativePath : `./${relativePath}`;
+}
 
 export interface GetConvertedPathParams {
   type?: "relative" | "absolute";
