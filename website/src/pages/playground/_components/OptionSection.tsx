@@ -2,6 +2,7 @@ import { optionJsonSchemaMap } from "codemod-kit/browser";
 import { useState, useEffect } from "react";
 import validator from "@rjsf/validator-ajv8";
 import { Select, Input, ConfigProvider, theme, Typography, Button } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
 import Form from "@rjsf/antd";
 
 import {
@@ -19,7 +20,7 @@ const CustomFieldTemplate = (props: FieldTemplateProps) => {
   const { label, required, errors, children } = props;
 
   return (
-    <div className="custom-field" style={{ marginBottom: "20px" }}>
+    <div className="custom-field" style={{ marginBottom: "4px" }}>
       <div
         className="custom-field-label"
         style={{ fontWeight: "bold", marginBottom: "5px" }}
@@ -63,7 +64,6 @@ const CustomObjectFieldTemplate = (props: ObjectFieldTemplateProps) => {
 
   // Skip rendering title for objects inside arrays
   const isNestedObject = uiSchema && uiSchema["ui:options"] && uiSchema["ui:options"].nested;
-
   return (
     <div className="object-field-container">
       {!isNestedObject && title && (
@@ -90,8 +90,11 @@ const CustomArrayFieldTemplate = (props: ArrayFieldTemplateProps) => {
     <div className="array-field-container" style={{ marginBottom: "16px" }}>
       <div className="array-items">
         {items.map((element: ArrayFieldTemplateItemType) => (
-          <div key={element.key} className="array-item-row" style={{ marginBottom: "8px", display: "flex", alignItems: "center" }}>
+          <div key={element.key} className="array-item-row" style={{ marginBottom: "4px", display: "flex", alignItems: "center" }}>
             <div className="array-item-content" style={{ flex: 1 }}>
+              <div style={{ fontSize: '12px', fontWeight: 'normal', color: '#666', marginBottom: '2px' }}>
+                option{element.index + 1}
+              </div>
               {element.children}
             </div>
             <Button 
@@ -100,9 +103,8 @@ const CustomArrayFieldTemplate = (props: ArrayFieldTemplateProps) => {
               onClick={element.onDropIndexClick(element.index)}
               size="small"
               style={{ marginLeft: "8px", flexShrink: 0 }}
-            >
-              삭제
-            </Button>
+              icon={<DeleteOutlined />}
+            />
           </div>
         ))}
       </div>
@@ -112,7 +114,7 @@ const CustomArrayFieldTemplate = (props: ArrayFieldTemplateProps) => {
           onClick={onAddClick} 
           style={{ marginTop: "8px", width: "100%" }}
         >
-          + 항목 추가
+          + Add Option
         </Button>
       )}
     </div>
@@ -127,7 +129,6 @@ interface EnumOption {
 const CustomWidgets = {
   TextWidget: (props: WidgetProps) => {
     const { id, value, required, disabled, onChange, schema } = props;
-    console.log(`TextWidget [${id}] 스키마:`, schema);
 
     return (
       <div className="dark">
@@ -328,11 +329,18 @@ const OptionSection = () => {
             }
             .array-item-row .custom-field {
               margin-bottom: 0;
+              padding: 2px 0;
+            }
+            .array-item-row .custom-field-label {
+              display:none;
+            }
+            .array-item-row .ant-form-item-label > label {
+              display: none;
             }
             .object-field-properties {
               display: flex;
               flex-direction: column;
-              gap: 12px;
+              gap: 4px;
             }
           `}
           </style>
