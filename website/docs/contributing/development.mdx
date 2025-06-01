@@ -1,0 +1,23 @@
+---
+sidebar_position: 2
+---
+
+The repository is structured as a yarn monorepo and largely consists of codemod-kit packages and a website.
+
+First, run yarn install to install dependencies.
+
+## packages
+
+The main function of the package is to execute predefined transforms using jscodeshift.
+
+This package mainly consists of two files for providing cli and programmatic methods, and one more file for running the transformer in a browser.
+
+When adding new transformers or options, please take care to add test code and documentation for them.
+
+## webstie
+
+The website is built with docusarus and can be run from root via `yarn start:website`.
+
+If you want to edit a document, try editing it in the docs or transformer folder.
+
+If you need to modify a playground, browse inside `src/page/playground`.
