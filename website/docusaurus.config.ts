@@ -70,7 +70,15 @@ const config: Config = {
       };
     },
   ],
-
+  themes: [
+    [
+      require.resolve("@easyops-cn/docusaurus-search-local"),
+      /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
+      ({
+        hashed: true,
+      }),
+    ],
+  ],
   presets: [
     [
       "classic",
@@ -132,12 +140,6 @@ const config: Config = {
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
-    },
-    algolia: {
-      appId: "JTW6KZXFD2",
-      apiKey: process.env.ALGOLIA_API_KEY,
-      indexName: "codemod-kit",
-      insights: true,
     },
   } satisfies Preset.ThemeConfig,
 };

@@ -17,6 +17,7 @@
   "dependencies": {
     "@docusaurus/core": "3.7.0",
     "@docusaurus/preset-classic": "3.7.0",
+    "@easyops-cn/docusaurus-search-local": "^0.49.2",
     "@mdx-js/react": "^3.0.0",
     "@monaco-editor/react": "^4.7.0",
     "@rjsf/antd": "^5.24.10",
