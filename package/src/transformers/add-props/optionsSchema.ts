@@ -6,21 +6,21 @@ export const optionsSchema = z
     componentSourceType: z
       .enum(["absolute", "relative"])
       .optional()
-      .describe("componentSource's type. you can choose absolute or relative"),
+      .describe("The type of value specified in the componentSource option. You can select a relative or absolute."),
     componentNameType: z
       .enum(["default", "named"])
       .optional()
-      .describe("component name's type. you can choose default or named"),
+      .describe("The type of value specified in the componentName option. You can select a default or named."),
     componentSource: z
       .string()
-      .describe("component source. you can choose package name or target path"),
-    componentName: z.string().describe("props to add's component name"),
-    propsName: z.string().describe("add props's name"),
+      .describe("Import module source of the component to which you want to add props"),
+    componentName: z.string().describe("Import module name of the component to which you want to add props"),
+    propsName: z.string().describe("Add props's name"),
     propsValue: z
       .union([z.string(), z.number(), z.boolean()])
-      .describe("add props's value. you can choose string, number, boolean"),
+      .describe("Add props's value. you can input string, number, boolean type value"),
   })
-  .describe("add props's name and value");
+  .describe("Add new Props to the component.");
 
 export const optionsSchemaJsonSchema = zodToJsonSchema(optionsSchema);
 

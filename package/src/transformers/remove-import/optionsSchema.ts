@@ -11,7 +11,7 @@ export const optionsSchema = z
         "The type of value specified in the source option. You can select a relative or absolute."
       ),
   })
-  .describe("remove import");
+  .describe("Remove target import module");
 
 export const optionsSchemaJsonSchema = zodToJsonSchema(optionsSchema);
 

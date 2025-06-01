@@ -2,8 +2,8 @@ import { OptionsSchema } from "./optionsSchema";
 import getConvertedPath from "../../utils/common/getConvertedPath";
 import type { API, FileInfo } from "jscodeshift";
 import isNodeGlobalScope from "../../utils/jscodeshift/isNodeGlobalScope";
-import getConvertedImportIdentifierName from "../../utils/jscodeshift/getConvertedImportIdentifierName";
-import isTargetFunctionCall from "../../utils/jscodeshift/isTargetFunctionCall";
+import getConvertedImportIdentifierName from "src/utils/jscodeshift/getConvertedImportIdentifierName";
+import isTargetFunctionCall from "src/utils/jscodeshift/isTargetFunctionCall";
 
 function transformer(file: FileInfo, api: API, options: OptionsSchema) {
   const sourceCode = file.source;
@@ -23,7 +23,7 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
     targetPath: functionSource,
   });
 
-  const convertedFunctionName = getConvertedImportIdentifierName({
+  const convertedComponentName = getConvertedImportIdentifierName({
     root,
     jscodeshift,
     source: convertedComponentSource,
@@ -31,13 +31,13 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
     name: functionName,
   });
 
-  if (!convertedFunctionName) {
+  if (!convertedComponentName) {
     return root.toSource();
   }
 
-  root
+  return root
     .find(jscodeshift.CallExpression)
-    .filter(isTargetFunctionCall(convertedFunctionName))
+    .filter(isTargetFunctionCall(convertedComponentName))
     .filter(isNodeGlobalScope)
     .replaceWith((node)=>{
       return jscodeshift.callExpression(node.value.callee, [
@@ -54,8 +54,7 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
         ),
       ]);
     })
-
-  return root.toSource();
+    .toSource();
 }
 
 export default transformer;

@@ -1,7 +1,7 @@
 import { optionJsonSchemaMap } from "codemod-kit/browser";
 import { useState, useEffect } from "react";
 import validator from "@rjsf/validator-ajv8";
-import { Select, Input, ConfigProvider, theme, Typography, Button } from "antd";
+import { Select, Input, ConfigProvider, theme, Button } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import Form from "@rjsf/antd";
 
@@ -20,7 +20,7 @@ const CustomFieldTemplate = (props: FieldTemplateProps) => {
   const { label, required, errors, children } = props;
 
   return (
-    <div className="custom-field" style={{ marginBottom: "4px" }}>
+    <div className="custom-field" style={{ marginBottom: "10px" }}>
       <div
         className="custom-field-label"
         style={{ fontWeight: "bold", marginBottom: "5px" }}
@@ -47,40 +47,6 @@ const CustomTitleField = () => {
 
 const CustomDescriptionField = () => {
   return null;
-};
-
-interface ObjectFieldTemplateProps {
-  properties: {
-    content: React.ReactElement;
-    name: string;
-  }[];
-  title?: string;
-  description?: string;
-  uiSchema?: Record<string, unknown>;
-}
-
-const CustomObjectFieldTemplate = (props: ObjectFieldTemplateProps) => {
-  const { properties, title, description, uiSchema } = props;
-
-  // Skip rendering title for objects inside arrays
-  const isNestedObject = uiSchema && uiSchema["ui:options"] && uiSchema["ui:options"].nested;
-  return (
-    <div className="object-field-container">
-      {!isNestedObject && title && (
-        <div style={{ fontWeight: "bold", marginBottom: "8px" }}>
-          {title}
-        </div>
-      )}
-      {!isNestedObject && description && (
-        <Typography.Text type="secondary" style={{ marginBottom: "8px", display: "block" }}>
-          {description}
-        </Typography.Text>
-      )}
-      <div className="object-field-properties">
-        {properties.map((prop) => prop.content)}
-      </div>
-    </div>
-  );
 };
 
 const CustomArrayFieldTemplate = (props: ArrayFieldTemplateProps) => {
@@ -348,10 +314,7 @@ const OptionSection = () => {
             <Form
               schema={currentSchema}
               formData={transformerOption}
-              onChange={(e) => {
-                updateTransformerOption(e.formData);
-
-                // validator.isValid(currentSchema, e.formData, currentSchema)
+              onChange={(e) => { updateTransformerOption(e.formData);
               }}
               validator={validator}
               uiSchema={customUiSchema}
@@ -360,7 +323,6 @@ const OptionSection = () => {
                 TitleFieldTemplate: CustomTitleField,
                 DescriptionFieldTemplate: CustomDescriptionField,
                 ArrayFieldTemplate: CustomArrayFieldTemplate,
-                ObjectFieldTemplate: CustomObjectFieldTemplate,
                 ButtonTemplates: {
                   SubmitButton: CustomSubmitButton,
                 },

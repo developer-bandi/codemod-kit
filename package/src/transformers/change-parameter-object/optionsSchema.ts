@@ -6,18 +6,18 @@ export const optionsSchema = z
     functionSourceType: z
       .enum(["absolute", "relative"])
       .optional()
-      .describe("function source's type. you can choose absolute or relative"),
+      .describe("The type of value specified in the functionSource option. You can select a relative or absolute."),
     functionNameType: z
       .enum(["default", "named"])
       .optional()
-      .describe("function name's type. you can choose default or named"),
+      .describe("The type of value specified in the functionName option. You can select a default or named."),
     functionSource: z
       .string()
-      .describe("function source. you can choose package name or target path"),
-    functionName: z.string().describe("function name"),
-    objectKeys: z.string().array().describe("function parameter object keys"),
+      .describe("Import module source of the function to which you want to change the parameter to object"),
+    functionName: z.string().describe("Import module name of the function to which you want to change the parameter to object"),
+    objectKeys: z.string().array().describe("Function parameter object keys"),
   })
-  .describe("remove props");
+  .describe("Change function parameter to object");
 
 export const optionsSchemaJsonSchema = zodToJsonSchema(optionsSchema);
 
