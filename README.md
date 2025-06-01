@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  See <strong><a href=https://codemod-kit.netlify.app">codemod-kit.netlify.app</a></strong> for documentation on the latest released version.
+  See <strong><a href="https://codemod-kit.netlify.app">codemod-kit.netlify.app</a></strong> for documentation on the latest released version.
 </p>
 
 ## License
