@@ -46,7 +46,7 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
         return attribute;
       });
 
-      return jscodeshift.jsxOpeningElement(node.value.name, attributes);
+      return jscodeshift.jsxOpeningElement(node.value.name, attributes,node.value.selfClosing);
     })
 
     return root.toSource()

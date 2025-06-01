@@ -38,7 +38,11 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
     .find(jscodeshift.JSXOpeningElement)
     .filter(isTargetJsxNode(convertedComponentName))
     .replaceWith((node)=>{
-      return jscodeshift.jsxOpeningElement(node.value.name, node.value.attributes?.filter((attribute)=>attribute.type === "JSXAttribute" && attribute.name.name !== propsName));
+      return jscodeshift.jsxOpeningElement(
+        node.value.name, 
+        node.value.attributes?.filter((attribute)=>attribute.type === "JSXAttribute" && attribute.name.name !== propsName),
+        node.value.selfClosing
+      );
     })
 
   return root.toSource();

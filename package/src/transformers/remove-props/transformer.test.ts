@@ -4,7 +4,7 @@ import transform from "./transformer";
 import { OptionsSchema } from "./optionsSchema";
 import getTransformParms from "../../utils/test/getTransformPaths";
 
-describe("general case", () => {
+describe("remove-props", () => {
   it("named export", () => {
     const input = `
 import { App } from "foo";
@@ -141,10 +141,7 @@ const result = <App
 `;
     const expectedOuput = `
 import { App } from "foo";
-const result = <App
-    title="hello"
-    description="asdf"
-  />
+const result = <App title="hello" description="asdf" />
 `;
     const transformParms = getTransformParms<OptionsSchema>({
       input,

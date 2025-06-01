@@ -15,10 +15,7 @@ const result = <App
 `;
     const expectedOuput = `
 import { App } from "foo";
-const result = <App
-    title="hello"
-    content="this is dashboard page"
-  />
+const result = <App title="hello" content="this is dashboard page" />
 `;
     const transformParms = getTransformParms<OptionsSchema>({
       input,
@@ -46,10 +43,7 @@ const result = <Test
 `;
     const expectedOuput = `
 import { App as Test } from "foo";
-const result = <Test
-    title="hello"
-    content="this is dashboard page"
-  />
+const result = <Test title="hello" content="this is dashboard page" />
 `;
     const transformParms = getTransformParms<OptionsSchema>({
       input,
@@ -77,10 +71,7 @@ const result = <Test
 `;
     const expectedOuput = `
 import Test from "foo";
-const result = <Test
-    title="hello"
-    content="this is dashboard page"
-  />
+const result = <Test title="hello" content="this is dashboard page" />
 `;
     const transformParms = getTransformParms<OptionsSchema>({
       input,
@@ -108,10 +99,7 @@ const result = <Test
 `;
     const expectedOuput = `
 import * as Test from "foo";
-const result = <Test
-    title="hello"
-    content="this is dashboard page"
-  />
+const result = <Test title="hello" content="this is dashboard page" />
 `;
     const transformParms = getTransformParms<OptionsSchema>({
       input,
@@ -139,10 +127,7 @@ const result = <Test.App
 `;
     const expectedOuput = `
 import * as Test from "foo";
-const result = <Test.App
-    title="hello"
-    content="this is dashboard page"
-  />
+const result = <Test.App title="hello" content="this is dashboard page" />
 `;
     const transformParms = getTransformParms<OptionsSchema>({
       input,
@@ -168,10 +153,7 @@ const result = <App
   />
     `;
     const expectedOuput = `import { App } from "../test/foo.ts";
-const result = <App
-    title="hello"
-    content="this is dashboard page"
-  />
+const result = <App title="hello" content="this is dashboard page" />
     `;
     const transformParms = getTransformParms<OptionsSchema>({
       input,

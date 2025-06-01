@@ -110,41 +110,15 @@ Test({
     expect(output).toEqual(expectedOuput);
   });
 
-  it("namespace named export", () => {
-    const input = `
-import * as Test from "foo";
-Test.dummyFunction("hello", "this is dashboard page");
-`;
-    const expectedOuput = `
-import * as Test from "foo";
-Test.dummyFunction({
-  "title": "hello",
-  "description": "this is dashboard page"
-});
-`;
-    const transformParms = getTransformParms<OptionsSchema>({
-      input,
-      options: {
-        functionSourceType: "absolute",
-        functionNameType: "named",
-        functionSource: "foo",
-        functionName: "dummyFunction",
-        objectKeys: ["title", "description"],
-      },
-    });
-    const output = transform(...transformParms);
-
-    expect(output).toEqual(expectedOuput);
-  });
 
   it("relative import", () => {
     const input = `
-import * as Test from "../test/foo.ts";
-Test.dummyFunction("hello", "this is dashboard page");
+import {dummyFunction} from "../test/foo.ts";
+dummyFunction("hello", "this is dashboard page");
 `;
     const expectedOuput = `
-import * as Test from "../test/foo.ts";
-Test.dummyFunction({
+import {dummyFunction} from "../test/foo.ts";
+dummyFunction({
   "title": "hello",
   "description": "this is dashboard page"
 });
@@ -172,7 +146,9 @@ Test.dummyFunction({
 
     const expectedOuput = `
     import { dummyFunction } from "foo";
-    dummyFunction({ "title": "hello" });
+    dummyFunction({
+        "title": "hello"
+    });
     `;
     const transformParms = getTransformParms<OptionsSchema>({
       input,

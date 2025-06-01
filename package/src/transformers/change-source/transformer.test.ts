@@ -7,8 +7,8 @@ import getTransformParms from "../../utils/test/getTransformPaths";
 
 describe("change-source", () => {
   it("default exports", () => {
-    const input = `import Utils from "utils"`;
-    const expectedOuput = `import Utils from "lib"`;
+    const input = `import Utils from "utils";`;
+    const expectedOuput = `import Utils from "lib";`;
     const transformParms = getTransformParms<OptionsSchema>({
       input,
       options: {
@@ -23,8 +23,8 @@ describe("change-source", () => {
   });
 
   it("named exports", () => {
-    const input = `import { calculateSum } from "utils"`;
-    const expectedOuput = `import { calculateSum } from "lib"`;
+    const input = `import { calculateSum } from "utils";`;
+    const expectedOuput = `import { calculateSum } from "lib";`;
     const transformParms = getTransformParms<OptionsSchema>({
       input,
       options: {
@@ -39,8 +39,8 @@ describe("change-source", () => {
   });
 
   it("named exports with alias", () => {
-    const input = `import { sum as calculateSum } from "utils"`;
-    const expectedOuput = `import { sum as calculateSum } from "lib"`;
+    const input = `import { sum as calculateSum } from "utils";`;
+    const expectedOuput = `import { sum as calculateSum } from "lib";`;
     const transformParms = getTransformParms<OptionsSchema>({
       input,
       options: {
@@ -55,8 +55,8 @@ describe("change-source", () => {
   });
 
   it("default and named exports", () => {
-    const input = `import Utils, { calculateSum } from "utils"`;
-    const expectedOuput = `import Utils, { calculateSum } from "lib"`;
+    const input = `import Utils, { calculateSum } from "utils";`;
+    const expectedOuput = `import Utils, { calculateSum } from "lib";`;
     const transformParms = getTransformParms<OptionsSchema>({
       input,
       options: {
@@ -71,8 +71,8 @@ describe("change-source", () => {
   });
 
   it("namespace imports", () => {
-    const input = `import * as Utils from "utils"`;
-    const expectedOuput = `import * as Utils from "lib"`;
+    const input = `import * as Utils from "utils";`;
+    const expectedOuput = `import * as Utils from "lib";`;
     const transformParms = getTransformParms<OptionsSchema>({
       input,
       options: {
@@ -87,8 +87,8 @@ describe("change-source", () => {
   });
 
   it("default import not use specifier", () => {
-    const input = `import "utils"`;
-    const expectedOuput = `import "lib"`;
+    const input = `import "utils";`;
+    const expectedOuput = `import "lib";`;
     const transformParms = getTransformParms<OptionsSchema>({
       input,
       options: {
@@ -119,8 +119,8 @@ describe("change-source", () => {
   });
 
   it("type option 'absolute' default value", () => {
-    const input = `import Utils from "utils"`;
-    const expectedOuput = `import Utils from "lib"`;
+    const input = `import Utils from "utils";`;
+    const expectedOuput = `import Utils from "lib";`;
     const transformParms = getTransformParms<OptionsSchema>({
       input,
       options: {
@@ -134,8 +134,8 @@ describe("change-source", () => {
   });
 
   it("relative source path", () => {
-    const input = `import Utils from "./test/utils.ts"`;
-    const expectedOuput = `import Utils from "./test/lib.ts"`;
+    const input = `import Utils from "./test/utils.ts";`;
+    const expectedOuput = `import Utils from "./test/lib.ts";`;
     const transformParms = getTransformParms<OptionsSchema>({
       input,
       options: {

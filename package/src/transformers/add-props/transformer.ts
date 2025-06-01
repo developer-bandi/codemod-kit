@@ -53,7 +53,9 @@ function transformer(file: FileInfo, api: API, options: OptionsSchema) {
       return jscodeshift.jsxOpeningElement(node.value.name, [
         ...(node.value.attributes ?? []),
         jsxAttributeNodeFromOption,
-      ])
+      ],
+      node.value.selfClosing
+      )
     })
 
     return root.toSource();
